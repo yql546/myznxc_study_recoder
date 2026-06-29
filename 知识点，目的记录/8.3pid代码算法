@@ -1,0 +1,46 @@
+
+
+1.
+
+定义了，结构体指针变量，
+来查找并修改结构体参数，
+
+修改方法：
+指针变量->结构体某一变量=要传递的值
+
+float P_realize(tPid * pid,float actual_val)
+{
+pid->actual_val = actual_val;//传递真实值
+
+....}
+
+注意：使用指针变量，去查找并修改原始结构体变量所在的内存，
+
+如果传入结构体，修改的是拷贝过来的内存，
+不会对原始的结构体变量进行修改。
+
+
+pid三项理解：
+
+
+// PID控制函数
+float PID_realize(tPid * pid,float actual_val)
+{
+pid->actual_val = actual_val;//传递真实值
+pid->err = pid->target_val - pid->actual_val;////当前误差=目标值-真实值
+pid->err_sum += pid->err;//误差累计值 = 当前误差累计和
+//使用PID控制 输出 = Kp*当前误差 + Ki*误差累计值 + Kd*(当前误差-上次误差)
+pid->actual_val = pid->Kp*pid->err + pid->Ki*pid->err_sum + pid->Kd*(pid-
+>err - pid->err_last);
+//保存上次误差: 这次误差赋值给上次误差
+pid->err_last = pid->err;
+return pid->actual_val;
+}
+
+kp项，根据此刻产生的误差，调节
+
+KI项，根据误差的逐渐累积，来调节：降低误差
+
+ki项，根据此刻误差的变化趋势，来改变调节方向。
+
+4轮小车，运动比较简单，不需要kd项
