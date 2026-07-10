@@ -1,0 +1,45 @@
+
+1.
+流程看笔记吧，毕竟是上位机的传输协议配置，自己敲一遍才是最重要的
+我这里从头到尾跟着敲一遍就行
+
+2.
+记录，自己不熟悉的知识点：
+
+a.使能串口1接收中断，
+stm32f4xx_hal_uart.h中的宏定义:
+__HAL_UART_ENABLE_IT(&huart1,UART_IT_RXNE); //开启串口1接收中断
+这样，接收到数据就是可以进入中断了
+
+注意：宏定义前面的下划线是两个：__HAL
+
+3.
+编写解析sjson指令的函数
+
+#include "cJSON.h"
+#include <string.h>
+cJSON *cJsonData ,*cJsonVlaue;
+if(Usart_WaitReasFinish() == 0)//是否接收完毕
+{
+测试发送cJSON数据就会解析收到数据
+cJsonData = cJSON_Parse((const char *)Usart1_ReadBuf);
+if(cJSON_GetObjectItem(cJsonData,"p") !=NULL)
+{
+cJsonVlaue = cJSON_GetObjectItem(cJsonData,"p");
+p = cJsonVlaue->valuedouble;
+pidMotor1Speed.Kp = p;
+}
+if(cJSON_GetObjectItem(cJsonData,"i") !=NULL)
+{
+cJsonVlaue = cJSON_GetObjectItem(cJsonData,"i");
+i = cJsonVlaue->valuedouble;
+pidMotor1Speed.Ki = i;
+}
+
+........
+这个问ai吧，
+
+4，效果：
+上位机数据发送
+{"p":5, "1":5, "d":1, "a":32]
+就可以改变参数来

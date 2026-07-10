@@ -1,0 +1,12 @@
+
+1.
+单引号 'a'（字符），是一个字符常量，对应一个数字。
+双引号"a"是一个字符串
+
+2.
+HAL_TIM_Base_Start_IT(&htim1);                //开启定时器1 中断
+  __HAL_UART_ENABLE_IT(&huart1,UART_IT_RXNE);	//开启串口1接收中断
+  
+HAL_UART_Receive_IT(&huart3,&usart3_receive_data,1); //串口三接收数据
+
+这3个函数的区别。
